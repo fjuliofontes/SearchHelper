@@ -50,6 +50,18 @@ window.setInterval(function() {
             }
         }
 
+        // check for errors
+        var errors = document.getElementsByClassName("text-color-error");
+        // if found
+        if (errors.length >= 1) {
+            // verify if we got an error
+            if (errors[0].textContent.includes("Please refresh")) {
+                console.log("Error, refreshing...");
+                // reload the page
+                window.location.reload();
+            }
+        }
+
         // check if notify me is still visible
         var notifyBtn = document.getElementsByClassName("buttoncount-1");
         // if found
@@ -64,6 +76,32 @@ window.setInterval(function() {
                 }
             }
         }
+
+        // check for table of sizes 
+        var table = document.getElementsByClassName("size-layout");
+        // if found
+        if (table.length >= 1) {
+            // if childNodes not null, means that table of sizes is ready
+            for (var i = 0; i < table[0].childNodes.length; i++) {
+                // check if there is at least one size available
+                if (table[0].childNodes[i].getAttribute('data-qa') === "size-available") {
+                    console.log("Sizes available");
+                    break;
+                }
+                // TODO: reload page ?? 
+            }
+            // table[0].childNodes.forEach(function(node) {
+            //     console.log(node.textContent);
+            // });
+        }
+
+        // // if found
+        // if (join.length >= 1) {
+        //     // verify if the login name is a valid user name
+        //     if (join[0].textContent === "Join/Log In") {
+        //         console.log("Invalid User");
+        //     }
+        // }
     }
 
 
