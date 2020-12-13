@@ -32,41 +32,64 @@ window.setInterval(function() {
         // search user login name
         var elems = document.querySelectorAll('[data-qa]');
         elems.forEach(function(elem) {
+            // search user name
             if (elem.getAttribute('data-qa') === "user-name") {
                 if (elem.textContent.length >= 1) {
                     console.log("Valid User");
+                }
+            }
+            // search Confirm Button 
+            if (elem.getAttribute('data-qa') === "presubmit-confirm") {
+                if (elem.textContent === "Confirm ") {
+                    console.log("Confirm Button!");
+                }
+            }
+            // search save & continue button 
+            if (elem.getAttribute('data-qa') === "save-button") {
+                if (elem.textContent === "Save & Continue") {
+                    console.log("Save & Continue!");
+                }
+            }
+            // search submit order button
+            if (elem.getAttribute('data-qa') === "save-button") {
+                if (elem.textContent === "Submit Order") {
+                    console.log("Submit Order!");
                 }
             }
         });
 
 
         // check if join/login button is available 
-        var join = document.getElementsByClassName("join-log-in");
+        var joinBtn = document.getElementsByClassName("join-log-in");
         // if found
-        if (join.length >= 1) {
+        Array.prototype.forEach.call(joinBtn, function(btn) {
             // verify if the login name is a valid user name
-            if (join[0].textContent === "Join/Log In") {
+            if (btn.textContent === "Join/Log In") {
                 console.log("Invalid User");
             }
-        }
+        });
 
         // check for errors
         var errors = document.getElementsByClassName("text-color-error");
         // if found
-        if (errors.length >= 1) {
+        Array.prototype.forEach.call(errors, function(error) {
             // verify if we got an error
-            if (errors[0].textContent.includes("Please refresh")) {
+            if (error.textContent.includes("Please refresh")) {
                 console.log("Error, refreshing...");
                 // reload the page
                 window.location.reload();
             }
-        }
+            // search cvc field
+            if (error.textContent.includes("security code")) {
+                console.log("Type CVC!");
+            }
+        });
 
         // check if notify me is still visible
-        var notifyBtn = document.getElementsByClassName("buttoncount-1");
+        var buttonCount = document.getElementsByClassName("buttoncount-1");
         // if found
-        if (notifyBtn.length >= 1) {
-            if (notifyBtn[0].textContent === "Notify Me") {
+        Array.prototype.forEach.call(buttonCount, function(btn) {
+            if (btn.textContent === "Notify Me") {
                 // check current time and reload the page
                 // TODO: replace with (hour === 8 && minute === 0 && seconds <= 10)
                 if (hour >= 8 && minute >= 0 && seconds <= 10) {
@@ -75,16 +98,16 @@ window.setInterval(function() {
                     window.location.reload();
                 }
             }
-        }
+        });
 
         // check for table of sizes 
-        var table = document.getElementsByClassName("size-layout");
+        var sizeTable = document.getElementsByClassName("size-layout");
         // if found
-        if (table.length >= 1) {
+        Array.prototype.forEach.call(sizeTable, function(table) {
             // if childNodes not null, means that table of sizes is ready
-            for (var i = 0; i < table[0].childNodes.length; i++) {
+            for (var i = 0; i < table.childNodes.length; i++) {
                 // check if there is at least one size available
-                if (table[0].childNodes[i].getAttribute('data-qa') === "size-available") {
+                if (table.childNodes[i].getAttribute('data-qa') === "size-available") {
                     console.log("Sizes available");
                     break;
                 }
@@ -93,7 +116,7 @@ window.setInterval(function() {
             // table[0].childNodes.forEach(function(node) {
             //     console.log(node.textContent);
             // });
-        }
+        });
 
         // // if found
         // if (join.length >= 1) {
