@@ -29,7 +29,7 @@ window.setInterval(function() {
         var minute = date.getMinutes();
         var seconds = date.getSeconds();
 
-        // search user login name
+        // search stuff
         var elems = document.querySelectorAll('[data-qa]');
         elems.forEach(function(elem) {
             // search user name
@@ -118,21 +118,34 @@ window.setInterval(function() {
             // });
         });
 
-        // // if found
-        // if (join.length >= 1) {
-        //     // verify if the login name is a valid user name
-        //     if (join[0].textContent === "Join/Log In") {
-        //         console.log("Invalid User");
-        //     }
-        // }
+        // what is the draw ?
+        var whatIsTheDraw = document.getElementsByClassName("headline");
+        // if found
+        Array.prototype.forEach.call(whatIsTheDraw, function(line) {
+            // search what is the draw 
+            if (line.textContent === "WHAT IS THE DRAW?") {
+                console.log("What is the draw ?");
+            }
+            // search Are You Sure Button
+            if (line.textContent === "ARE YOU SURE?") {
+                console.log("Are you sure ?");
+            }
+        });
+
+        // search buttons - Buttons Available:
+        // Enter Draw
+        // Notify Me
+        // Join / Log In
+        // Sizes 
+        // e.t.c ... 
+        var buttons = document.querySelectorAll("button");
+        buttons.forEach(function(btn) {
+            // search enter draw button
+            if (btn.textContent.includes("Enter Draw")) {
+                console.log("Enter Draw Button!");
+            }
+        });
     }
-
-
-
-    // console.debug(div[0].textContent);
-    // for (i = 0; i < div.length; i++) {
-    //     console.debug(div[i].textContent);
-    // }
 
     // var num = parseInt(div.innerText);
     // if (num > THRESHOLD) {
