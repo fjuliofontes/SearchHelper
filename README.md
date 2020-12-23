@@ -1,2 +1,2 @@
-# SNKRSExplorer
-Chrome Extension for SNKRS
+# Search Helper
+Educational only.
