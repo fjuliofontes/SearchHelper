@@ -1,25 +1,24 @@
 'use strict';
-// let NOTIFICATION_ID = 'snkrs';
-// let DEFAULT_RETRY_ATTEMPTS = 10;
 
-// let calls = {};
+let LOG_PREFIX = "SH:";
 
-// let proxyUser = '',
-//     proxyPwd = '';
+// debug function
+// 0 1608759842 SH: msg
+// ...
+// N 1608759842+N SH: msg
+function debug_log(msg) {
+    let current_timestamp = parseInt(new Date().getTime());
+    let debug_counter = parseInt(localStorage["debug-counter"]);
+    let header = debug_counter.toString() + ' ' +
+        current_timestamp.toString() + ' ' + LOG_PREFIX + ' ';
+    console.log(header + msg);
+    localStorage["debug-counter"] = debug_counter + 1;
+}
 
-// chrome.bookmarks.search('credentials', function(results) {
-//     if (typeof results !== 'undefined') {
-//         let crede = (new URL(results[0].url)).searchParams;
-//         if ((crede.get('user') !== null) && (crede.get('pwd') !== null)) {
-//             proxyUser = crede.get('user');
-//             proxyPwd = crede.get('pwd');
-//         }
-//     }
-// });
-
-//init debug structure if is first time or if more than 30 minutes elapsed
+//init debug structure if is first time or if more than 3 minutes elapsed
 if ((typeof localStorage["timestamp"] === 'undefined') ||
-    (new Date().getTime() - localStorage["timestamp"]) > (30 * 60 * 1000)) {
+    (new Date().getTime() - localStorage["timestamp"]) > (3 * 60 * 1000)) {
+    localStorage["debug-counter"] = 0;
     localStorage["user-name"] = 'false';
     localStorage["confirm-btn"] = 'false';
     localStorage["save-continue-btn"] = 'false';
@@ -42,29 +41,24 @@ if ((typeof localStorage["timestamp"] === 'undefined') ||
     localStorage["timestamp"] = new Date().getTime();
 }
 
+// runs every 1 second
 window.setInterval(function() {
-    //let div = document.getElementById("theDiv");
-    // let div = document.getElementsByClassName("sheet-data__price--actual notranslate");
-    // wait until page ready
-
+    // wait page ready
     if (document.readyState === 'complete') {
-
-
-
         // get current time
         let date = new Date();
         let hour = date.getHours();
         let minute = date.getMinutes();
         let seconds = date.getSeconds();
 
-        // search stuff
+        // get all 'data-qa' 
         let elems = document.querySelectorAll('[data-qa]');
         elems.forEach(function(elem) {
             if (localStorage["user-name"] == 'false') {
                 // search user name
                 if (elem.getAttribute('data-qa') === "user-name") {
                     if (elem.textContent.length >= 1) {
-                        console.log("SNKRS: Valid User");
+                        debug_log("user-name");
                         // update localStorage
                         localStorage["user-name"] = 'true';
                         // go to the next iteration
@@ -76,8 +70,8 @@ window.setInterval(function() {
             if (localStorage["confirm-btn"] == 'false') {
                 // search Confirm Button 
                 if (elem.getAttribute('data-qa') === "presubmit-confirm") {
-                    if (elem.textContent === "Confirm ") {
-                        console.log("SNKRS: Confirm Button!");
+                    if (elem.textContent === "Confirm") {
+                        debug_log("confirm-btn");
                         // update localStorage
                         localStorage["confirm-btn"] = 'true';
                         // go to the next iteration
@@ -90,7 +84,7 @@ window.setInterval(function() {
                 // search save & continue button 
                 if (elem.getAttribute('data-qa') === "save-button") {
                     if (elem.textContent === "Save & Continue") {
-                        console.log("SNKRS: Save & Continue!");
+                        debug_log("save-continue-btn");
                         // update localStorage
                         localStorage["save-continue-btn"] = 'true';
                         // go to the next iteration
@@ -103,7 +97,7 @@ window.setInterval(function() {
                 // search submit order button
                 if (elem.getAttribute('data-qa') === "save-button") {
                     if (elem.textContent === "Submit Order") {
-                        console.log("SNKRS: Submit Order!");
+                        debug_log("submit-order");
                         // update localStorage
                         localStorage["submit-order"] = 'true';
                         // go to the next iteration
@@ -120,7 +114,7 @@ window.setInterval(function() {
             Array.prototype.forEach.call(joinBtn, function(btn) {
                 // verify if the login name is a valid user name
                 if (btn.textContent === "Join/Log In") {
-                    console.log("SNKRS: Invalid User");
+                    debug_log("invalid-user");
                     // update locaStorage
                     localStorage["invalid-user"] = 'true';
                 }
@@ -134,7 +128,7 @@ window.setInterval(function() {
 
             // verify if we got an error
             if (error.textContent.includes("Please refresh")) {
-                console.log("SNKRS: Error, refreshing...");
+                debug_log("error-refresh");
                 // reload the page
                 window.location.reload();
                 // go to the next iteration
@@ -144,7 +138,7 @@ window.setInterval(function() {
             if (localStorage["type-cvc"] == 'false') {
                 // search cvc field
                 if (error.textContent.includes("security code")) {
-                    console.log("SNKRS: Type CVC!");
+                    debug_log("type-cvc");
                     // update localStorage
                     localStorage["type-cvc"] = 'true';
                     // go to the next iteration
@@ -162,7 +156,7 @@ window.setInterval(function() {
                 // check current time and reload the page
                 if (hour === 8 && minute === 0 && seconds <= 10) {
                     if (localStorage["notify-me"] == 'false') {
-                        console.log("SNKRS: Notify Me");
+                        debug_log("notify-me");
                         // update localStorage
                         localStorage["notify-me"] = 'true';
                     }
@@ -175,7 +169,7 @@ window.setInterval(function() {
             // check if we found the Purchased Button
             if (localStorage["purchased"] == 'false') {
                 if (btn.textContent === "Purchased") {
-                    console.log("SNKRS: Purchased");
+                    debug_log("purchased!");
                     // update localStorage
                     localStorage["purchased"] = 'true';
                     // go to the next iteration
@@ -193,7 +187,7 @@ window.setInterval(function() {
                 for (let i = 0; i < table.childNodes.length; i++) {
                     // check if there is at least one size available
                     if (table.childNodes[i].getAttribute('data-qa') === "size-available") {
-                        console.log("SNKRS: Sizes available");
+                        debug_log("sizes-available");
                         // update localStorage
                         localStorage["sizes-available"] = 'true';
                         break;
@@ -213,7 +207,7 @@ window.setInterval(function() {
             // search what is the draw 
             if (localStorage["what-is-draw"] == 'false') {
                 if (line.textContent === "WHAT IS THE DRAW?") {
-                    console.log("SNKRS: What is the draw ?");
+                    debug_log("what-is-draw");
                     // update localStorage
                     localStorage["what-is-draw"] = 'true';
                     // go to the next iteration
@@ -223,7 +217,7 @@ window.setInterval(function() {
             // search Are You Sure Button
             if (localStorage["are-you-sure"] == 'false') {
                 if (line.textContent === "ARE YOU SURE?") {
-                    console.log("SNKRS: Are you sure ?");
+                    debug_log("are-you-sure");
                     // update localStorage
                     localStorage["are-you-sure"] = 'true';
                     // go to the next iteration
@@ -233,7 +227,7 @@ window.setInterval(function() {
             // search An error occurred message
             if (localStorage["an-error-occurred"] == 'false') {
                 if (line.textContent === "An error occurred.") {
-                    console.log("SNKRS: An error occurred.");
+                    debug_log("an-error-occurred");
                     // update localStorage
                     localStorage["an-error-occurred"] = 'true';
                     // go to the next iteration
@@ -243,7 +237,7 @@ window.setInterval(function() {
             // search Got Em'
             if (localStorage["got-em"] == 'false') {
                 if (line.textContent === "Got 'em") {
-                    console.log("SNKRS: Got 'em");
+                    debug_log("got-em");
                     // update localStorage
                     localStorage["got-em"] = 'true';
                     // go to the next iteration
@@ -253,7 +247,7 @@ window.setInterval(function() {
             // search your entry is in
             if (localStorage["entry-in"] == 'false') {
                 if (line.textContent === "Your entry is in") {
-                    console.log("SNKRS: Your entry is in!");
+                    debug_log("entry-in");
                     // update localStorage
                     localStorage["entry-in"] = 'true';
                     // go to the next iteration
@@ -273,7 +267,7 @@ window.setInterval(function() {
             // search enter draw button
             if (localStorage["enter-draw"] == 'false') {
                 if (btn.textContent.includes("Enter Draw")) {
-                    console.log("SNKRS: Enter Draw Button!");
+                    debug_log("enter-draw");
                     // update localStorage
                     localStorage["enter-draw"] = 'true';
                     // go to the next iteration
@@ -283,7 +277,9 @@ window.setInterval(function() {
             // search refresh button
             if (localStorage["refresh-btn"] == 'false') {
                 if (btn.textContent === "refresh") {
-                    console.log("SNKRS: Refresh Button!");
+                    debug_log("refresh-btn");
+                    // reload the page, try only once
+                    window.location.reload();
                     // update localStorage
                     localStorage["refresh-btn"] = 'true';
                     // go to the next iteration
@@ -293,7 +289,7 @@ window.setInterval(function() {
             // search continue shopping
             if (localStorage["continue-shop"] == 'false') {
                 if (btn.textContent === "Continue Shopping") {
-                    console.log("SNKRS: Continue Shopping!");
+                    debug_log("continue-shop");
                     // update localStorage
                     localStorage["continue-shop"] = 'true';
                     // go to the next iteration
@@ -304,38 +300,13 @@ window.setInterval(function() {
 
         // check if OK banner cookies button is visible
         if (localStorage["cookies"] == 'false') {
-            let cookieBtn = document.getElementsByClassName("banner-cookie");
-            // if found
-            Array.prototype.forEach.call(cookieBtn, function(btn) {
-                // verify if the login name is a valid user name
-                if (btn.textContent === "OK") {
-                    console.log("SNKRS: Banner Cookie Button!");
-                    // update locaStorage
-                    localStorage["cookies"] = 'true';
-                }
-            });
+            let cookieBtn = document.querySelector("div[data-qa='cookie-banner']").classList.contains("d-sm-h");
+            // if false, cookieBtn is present
+            if (cookieBtn === false) {
+                debug_log("cookies");
+                // update locaStorage
+                localStorage["cookies"] = 'true';
+            }
         }
     }
-
-    // let num = parseInt(div.innerText);
-    // if (num > THRESHOLD) {
-    //     alert('The number is: ' + num);
-    // }
-    // If you need to reload the page itself to check the number
-    // then just reload the page on a regular interval
-    // window.location.reload();  
 }, 1000);
-
-
-// // Remove saved credentials on firts start
-// chrome.runtime.onStartup.addListener(function() {});
-
-// // Shows settings on install.
-// chrome.runtime.onInstalled.addListener(function(details) {
-//     if (details.reason && (details.reason === 'install') || (details.reason === 'update')) {}
-// });
-
-// // Show settings when clicking on the icon.
-// chrome.browserAction.onClicked.addListener(function() {});
-
-/* Core */

@@ -3,7 +3,7 @@
         "default_icon": "icon_32.png",
         "default_title": "Search Helper"
     },
-    "description": "This extension will monitor the SNKRS website.",
+    "description": "This extension help you to filter some important information that you may need.",
     "icons": {
         "128": "icon_128.png",
         "16": "icon_16.png",
@@ -13,7 +13,7 @@
     },
     "manifest_version": 2,
     "name": "Search Helper",
-    "permissions": ["bookmarks", "notifications", "webRequest", "webRequestBlocking", "\u003Call_urls>"],
+    "permissions": [],
     "version": "1.0",
     "content_scripts": [{
         "matches": ["*://*.nike.com/*"],
