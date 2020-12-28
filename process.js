@@ -15,9 +15,9 @@ function debug_log(msg) {
     localStorage["debug-counter"] = debug_counter + 1;
 }
 
-//init debug structure if is first time or if more than 3 minutes elapsed
+//init debug structure if is first time or if more than 5 minutes elapsed
 if ((typeof localStorage["timestamp"] === 'undefined') ||
-    (new Date().getTime() - localStorage["timestamp"]) > (3 * 60 * 1000)) {
+    (new Date().getTime() - localStorage["timestamp"]) > (5 * 60 * 1000)) {
     localStorage["debug-counter"] = 0;
     localStorage["user-name"] = 'false';
     localStorage["confirm-btn"] = 'false';
@@ -200,26 +200,17 @@ window.setInterval(function() {
             });
         }
 
-        // what is the draw ?
-        let whatIsTheDraw = document.getElementsByClassName("headline");
+        // what is the draw, search An error occurred message
+        // Got Em', entry is in
+        let headline_3 = document.getElementsByClassName("headline-3");
         // if found
-        Array.prototype.forEach.call(whatIsTheDraw, function(line) {
+        Array.prototype.forEach.call(headline_3, function(line) {
             // search what is the draw 
             if (localStorage["what-is-draw"] == 'false') {
                 if (line.textContent === "WHAT IS THE DRAW?") {
                     debug_log("what-is-draw");
                     // update localStorage
                     localStorage["what-is-draw"] = 'true';
-                    // go to the next iteration
-                    return;
-                }
-            }
-            // search Are You Sure Button
-            if (localStorage["are-you-sure"] == 'false') {
-                if (line.textContent === "ARE YOU SURE?") {
-                    debug_log("are-you-sure");
-                    // update localStorage
-                    localStorage["are-you-sure"] = 'true';
                     // go to the next iteration
                     return;
                 }
@@ -255,6 +246,22 @@ window.setInterval(function() {
                 }
             }
         });
+
+        // are you sure ?
+        if (localStorage["are-you-sure"] == 'false') {
+            let headline_1 = document.getElementsByClassName("headline-1");
+            // if found
+            Array.prototype.forEach.call(headline_1, function(line) {
+                // search Are You Sure Button
+                if (line.textContent === "ARE YOU SURE?") {
+                    debug_log("are-you-sure");
+                    // update localStorage
+                    localStorage["are-you-sure"] = 'true';
+                    // go to the next iteration
+                    return;
+                }
+            });
+        }
 
         // search buttons - Buttons Available:
         // Enter Draw
